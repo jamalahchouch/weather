@@ -1,0 +1,63 @@
+:root {
+      --bg: linear-gradient(135deg, #9face6, #74ebd5);
+      --card-bg: rgba(255, 255, 255, 0.2);
+      --text: #fff;
+    }
+    body.dark {
+      --bg: linear-gradient(135deg, #1e1e2f, #2b2b3c);
+      --card-bg: rgba(0, 0, 0, 0.3);
+      --text: #eee;
+    }
+    body {
+      margin: 0; padding: 0;
+      font-family: 'Segoe UI', sans-serif;
+      background: var(--bg); color: var(--text);
+      transition: background 0.5s ease, color 0.3s;
+      min-height: 100vh; display: flex;
+      justify-content: center; align-items: center;
+      flex-direction: column;
+    }
+    .toggle-mode {
+      position: absolute; top: 20px; right: 20px;
+      background: transparent; color: var(--text);
+      border: 1px solid var(--text); padding: 5px 10px;
+      cursor: pointer; border-radius: 20px;
+    }
+    .weather-card {
+      background: var(--card-bg); backdrop-filter: blur(10px);
+      border-radius: 20px; padding: 30px;
+      width: 95%; max-width: 600px; text-align: center;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.2); margin-top: 60px;
+    }
+    .temperature { font-size: 60px; font-weight: bold; }
+    .info-line {
+      display: flex; justify-content: space-around; margin-top: 20px;
+    }
+    .hourly {
+      margin-top: 30px;
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(70px, 1fr));
+      gap: 10px;
+    }
+    .hour-box {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px; border-radius: 10px; font-size: 13px;
+    }
+    .search-box {
+      display: flex; margin-top: 20px; gap: 10px; justify-content: center;
+    }
+    .search-box input {
+      padding: 10px; border-radius: 20px;
+      border: none; width: 200px; font-size: 16px;
+    }
+    .search-box button {
+      padding: 10px 15px; border-radius: 20px; border: none;
+      background-color: #007bff; color: white; cursor: pointer;
+    }
+    .search-box button:hover { background-color: #0056b3; }
+    .unit-switch { margin-top: 10px; }
+    .unit-switch button {
+      background: none; border: 1px solid var(--text);
+      color: var(--text); border-radius: 20px;
+      padding: 5px 10px; margin: 0 5px; cursor: pointer;
+    }
+    canvas { margin-top: 30px; }

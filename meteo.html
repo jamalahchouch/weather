@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Météo Maroc</title>
+  <link rel="stylesheet" href="style1.css">
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+</head>
+<body onload="getLocationWeather()">
+
+  <button class="toggle-mode" onclick="toggleMode()">🌙/☀️</button>
+
+  <div class="weather-card">
+    <div class="search-box">
+      <input type="text" id="villeInput" placeholder="Entrez une ville...">
+      <button onclick="getWeather()">🔍</button>
+    </div>
+
+    <div class="unit-switch">
+      <button onclick="setUnit('metric')">°C</button>
+      <button onclick="setUnit('imperial')">°F</button>
+    </div>
+
+    <h2 id="ville">Ville</h2>
+    <div class="temperature" id="temp">--°</div>
+    <img class="weather-icon" id="icon" src="" alt="icon météo" width="80">
+    <div id="description">...</div>
+
+    <div class="info-line">
+      <div><strong id="humidity">--%</strong><br>Humidité</div>
+      <div><strong id="wind">--</strong><br>Vent</div>
+      <div><strong id="rain">--%</strong><br>Précip.</div>
+    </div>
+
+    <div class="hourly" id="hourly"></div>
+
+    <canvas id="forecastChart" height="200"></canvas>
+  </div>
+
+  <script>
+    const apiKey = "8f4e71b8ecd180eb2cada956d09b1077";
+    let unit = "metric";
+    let forecastChart;
+
+    function toggleMode() {
+      document.body.classList.toggle("dark");
+    }
+
+    function setUnit(newUnit) {
+      unit = newUnit;
+      getWeather();
+    }
+
+    function getLocationWeather() {
+      if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(pos => {
+          const lat = pos.coords.latitude;
+          const lon = pos.coords.longitude;
+          getWeatherByCoords(lat, lon);
+        }, () => alert("Géolocalisation refusée."));
+      }
+    }
+
+    async function getWeather() {
+      const ville = document.getElementById("villeInput").value.trim();
+      if (!ville) return alert("Entrez une ville valide !");
+      const url = `https://api.openweathermap.org/data/2.5/forecast?q=${ville},MA&appid=${apiKey}&units=${unit}&lang=fr`;
+      fetchWeather(url);
+    }
+
+    async function getWeatherByCoords(lat, lon) {
+      const url = `https://api.openweathermap.org/data/2.5/forecast?lat=${lat}&lon=${lon}&appid=${apiKey}&units=${unit}&lang=fr`;
+      fetchWeather(url);
+    }
+
+    async function fetchWeather(url) {
+      try {
+        const response = await fetch(url);
+        const data = await response.json();
+        if (!data || !data.list) throw new Error("Erreur API");
+
+        const first = data.list[0];
+        const iconCode = first.weather[0].icon;
+        const tempUnit = unit === 'metric' ? '°C' : '°F';
+
+        document.getElementById("ville").textContent = data.city.name;
+        document.getElementById("temp").textContent = `${Math.round(first.main.temp)}${tempUnit}`;
+        document.getElementById("description").textContent = first.weather[0].description;
+        document.getElementById("humidity").textContent = `${first.main.humidity}%`;
+        document.getElementById("wind").textContent = `${first.wind.speed} ${unit === 'metric' ? 'km/h' : 'mph'}`;
+        document.getElementById("rain").textContent = first.pop ? `${Math.round(first.pop * 100)}%` : "0%";
+        document.getElementById("icon").src = `https://openweathermap.org/img/wn/${iconCode}.gif`;
+
+        
+        const hourlyDiv = document.getElementById("hourly");
+        hourlyDiv.innerHTML = "";
+        data.list.slice(0, 8).forEach(entry => {
+          const hour = new Date(entry.dt_txt).getHours();
+          const time = `${hour.toString().padStart(2, '0')}h`;
+          const temp = `${Math.round(entry.main.temp)}${tempUnit}`;
+          const icon = entry.weather[0].icon;
+          hourlyDiv.innerHTML += `
+            <div class="hour-box">
+              ${time}<br>
+              <img src="https://openweathermap.org/img/wn/${icon}.png" width="35"/><br>
+              ${temp}
+            </div>
+          `;
+        });
+
+      
+        const daily = data.list.filter(d => d.dt_txt.includes("12:00:00")).slice(0, 5);
+        const labels = daily.map(d => new Date(d.dt_txt).toLocaleDateString('fr-FR', { weekday: 'short' }));
+        const temps = daily.map(d => d.main.temp_max);
+        const minTemps = daily.map(d => d.main.temp_min);
+
+        if (forecastChart) forecastChart.destroy();
+        const ctx = document.getElementById("forecastChart").getContext("2d");
+        forecastChart = new Chart(ctx, {
+          type: 'line',
+          data: {
+            labels: labels,
+            datasets: [
+              {
+                label: "Max",
+                data: temps,
+                borderColor: "#ff6b6b",
+                fill: false,
+              },
+              {
+                label: "Min",
+                data: minTemps,
+                borderColor: "#4dabf7",
+                fill: false,
+              }
+            ]
+          },
+          options: {
+            responsive: true,
+            plugins: {
+              legend: { labels: { color: getComputedStyle(document.body).getPropertyValue('--text') } }
+            },
+            scales: {
+              y: {
+                ticks: {
+                  color: getComputedStyle(document.body).getPropertyValue('--text')
+                }
+              },
+              x: {
+                ticks: {
+                  color: getComputedStyle(document.body).getPropertyValue('--text')
+                }
+              }
+            }
+          }
+        });
+
+      } catch (err) {
+        alert("Erreur de chargement !");
+        console.error(err);
+      }
+    }
+  </script>
+</body>
+</html>

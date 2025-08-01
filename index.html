@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="style.css">
+    <link href='https://cdn.boxicons.com/fonts/basic/boxicons.min.css' rel='stylesheet'>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+   
+    <title>maroc</title>
+</head>
+<body>
+    <section class="sectionHeader">
+    <header class="header">
+        <a href="#" class="logo">Maroc</a>
+        <input type="checkbox" name="" id="check">
+        <label for="check" class="icons">
+            <i class='bx  bx-menu' id="menu-icon" ></i> 
+            <i class='bx  bx-x' id="close-icon" ></i>
+        </label>
+    
+    <nav class="navbar">
+        <a href="#" style="--i:0;">AccueiL</a>
+        <a href="meteo.html" style="--i:1;">Meteo</a>
+        <a href="#Galerie" style="--i:2;">Galerie</a>
+        <a href="#contact" style="--i:3;">Contact</a>
+    </nav>
+    
+  </header>
+   </section>
+   <section class="badie"> 
+   <h1>🌤️ Météo du Maroc</h1>
+  <div id="searchContainer">
+    <input type="text" id="searchInput" placeholder="Rechercher une ville...">
+  </div>
+  <div class="grid" id="weatherGrid"></div>
+  <div class="pagination" id="pagination"></div>
+
+  <!-- Forecast Modal -->
+  <div id="forecastModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="closeModal()">&times;</span>
+      <h2 id="modalTitle"></h2>
+      <canvas id="forecastChart"></canvas>
+    </div>
+  </div>
+</section>
+  <!-- Localisation Modal -->
+  <div id="locationModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="document.getElementById('locationModal').style.display='none'">&times;</span>
+      <h2>Votre météo actuelle</h2>
+      <div id="locationWeather"></div>
+    </div>
+  </div>
+
+<section class="image">
+    <img src="assets/img1.jpeg" alt="" class="imge"width="700px" height="300px">
+    <img src="assets/hassanmosque.jpg" alt="" class="imge"width="700px" height="300px">  
+    <img src="assets/img2.jpeg" alt="" class="imge" width="350px" height="300px">  
+    <img src="assets/img3.jpeg" alt="" class="imge"width="350px" height="300px">      
+    <img src="assets/img4.jpeg" alt="" class="imge"width="350px" height="300px">  
+    <img src="assets/img5.jpeg" alt="" class="imge"width="350px" height="300px"> 
+    <img src="assets/img6.jpeg" alt="" class="imge"width="350px" height="300px">  
+    <img src="assets/img7.jpeg" alt="" class="imge" width="350px" height="300px"> 
+</section>
+<section style="position: absolute;" >
+<footer style="display: block;">
+  <h3 style="display: flex;justify-content: center; align-items: start;">© 2025 Copyright France 24 </h3>
+</section>
+<section class="formulaire" id="contact">
+  <form action="" method="post">
+    <h2 style="text-align: center; padding: 30px;">contact nous </h2>
+    <div class="forme">
+      <label for="nom">Nom</label>
+      <input type="text" id="nom" required>
+    </div>
+    <div class="forme">
+      <label for="prenom">Prenom</label>
+      <input type="text" id="prenom" required>
+    </div>
+    <div class="forme">
+      <label for="email">Email</label>
+      <input type="text" id="email" required>
+    </div> 
+    <div class="forme">
+       <label for="message">Message</label>
+       <textarea type="text" id="message" required></textarea>
+    </div>
+   
+    <div style="display: flex; justify-content: center; align-items: center;" ><button type="submit">Envoyer</button></div>
+  </form>
+</section>
+
+ 
+   
+<script src="script.js"></script>
+</body>
+</html>
